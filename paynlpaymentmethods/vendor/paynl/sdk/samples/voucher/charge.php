@@ -1,17 +1,27 @@
 <?php
-/**
- * Subtract an amount from a voucher
- */
-require_once '../../vendor/autoload.php';
-require_once '../config.php';
 
-try {
-    /** @var boolean $result */
-    $result = \Paynl\Voucher::charge(array(
-        'cardNumber' => '012345678912345678',
-        'amount'     => 0.5,    // The amount to subtract from the voucher.
-        'pincode'    => '0123'  // Optional, only needed if the card type needs a pincode
-    ));
-} catch (\Paynl\Error\Error $e) {
-    echo "Error: " . $e->getMessage();
-}
+declare(strict_types=1);
+
+$app = require __DIR__ . '/../init_application.php';
+
+$response = $app
+    ->setRequest(
+        'ChargeVoucher',
+        [
+            'cardNumber' => (isset($config) === true ? $config->get('cardNumber') : ''),
+        ],
+        null,
+        [
+            'Voucher' => [
+                'amount' => [
+                    'amount' => 1,
+                    'currency' => 'EUR',
+                ],
+                'pinCode' => '58809',
+            ],
+        ]
+    )
+    ->run()
+;
+
+print_response($response);

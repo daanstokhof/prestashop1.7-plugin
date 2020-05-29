@@ -1,16 +1,23 @@
 <?php
-/**
- * Get the balance of a voucher
- */
-require_once '../../vendor/autoload.php';
-require_once '../config.php';
 
-try {
-    /** @var float $balance */
-    $balance = \Paynl\Voucher::balance(array(
-        'cardNumber' => '012345678912345678',
-        'pincode'    => '1234' // Optional, only needed if the card type needs a pincode
-    ));
-} catch (\Paynl\Error\Error $e) {
-    echo "Error: ". $e->getMessage();
-}
+declare(strict_types=1);
+
+$app = require __DIR__ . '/../init_application.php';
+
+$response = $app
+    ->setRequest(
+        'CheckVoucherBalance',
+        [
+            'cardNumber' => (isset($config) === true ? $config->get('cardNumber') : ''),
+        ],
+        null,
+        [
+            'Voucher' => [
+                'pinCode' => '58809',
+            ],
+        ]
+    )
+    ->run()
+;
+
+print_response($response);

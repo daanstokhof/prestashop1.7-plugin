@@ -34,7 +34,7 @@ class PaynlPaymentMethodsExchangeModuleFrontController extends ModuleFrontContro
      */
     public function postProcess()
     {
-        $transactionId = $_REQUEST['order_id'];
+        $transactionId = $_REQUEST['transactionId'];
 
         # PAY. action
         $action = Tools::getValue('action');

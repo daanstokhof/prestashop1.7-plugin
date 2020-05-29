@@ -1,176 +1,133 @@
 <?php
-/*
- * Copyright (C) 2015 Andy Pieters <andy@andypieters.nl>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 
-namespace Paynl\Api;
+declare(strict_types=1);
 
-use Curl\Curl;
-use Paynl\Config;
-use Paynl\Error;
-use Paynl\Helper;
+namespace PayNL\Sdk\Api;
+
+use PayNL\GuzzleHttp\Client as GuzzleClient;
+use PayNL\Sdk\{
+    AuthAdapter\AdapterInterface as AuthAdapterInterface,
+    Common\DebugAwareInterface,
+    Common\DebugAwareTrait,
+    Common\OptionsAwareInterface,
+    Common\OptionsAwareTrait,
+    Response\Response,
+    Request\AbstractRequest,
+    Request\RequestInterface,
+    Response\ResponseInterface
+};
 
 /**
- * Description of Api
+ * Class Api
  *
- * @author Andy Pieters <andy@andypieters.nl>
+ * @package PayNL\Sdk
  */
-class Api
+class Api implements OptionsAwareInterface, DebugAwareInterface
 {
-    /**
-     * @var int the version of the api
-     */
-    protected $version = 1;
+    use DebugAwareTrait, OptionsAwareTrait;
 
     /**
-     * @var array
+     * @var GuzzleClient
      */
-    protected $data = array();
+    protected $client;
 
     /**
-     * @var bool Is the ApiToken required for this API
+     * @var AuthAdapterInterface
      */
-    protected $apiTokenRequired = false;
-    /**
-     * @var bool Is the serviceId required for this API
-     */
-    protected $serviceIdRequired = false;
+    protected $authAdapter;
 
     /**
-     * @param $endpoint
-     * @param null|int $version
+     * Api constructor.
      *
-     * @return array
+     * @param AuthAdapterInterface $authenticationAdapter
+     * @param GuzzleClient $client
+     * @param array $options
+     */
+    public function __construct(AuthAdapterInterface $authenticationAdapter, GuzzleClient $client, array $options = [])
+    {
+        $this->setAuthAdapter($authenticationAdapter)
+            ->setClient($client)
+            ->setOptions($options)
+        ;
+    }
+
+    /**
+     * @param GuzzleClient $client
      *
-     * @throws Error\Api
-     * @throws Error\Error
+     * @return Api
      */
-    public function doRequest($endpoint, $version = null)
+    protected function setClient(GuzzleClient $client): self
     {
-        if ($version === null) {
-            $version = $this->version;
-        }
-
-        $auth = $this->getAuth();
-        $data = $this->getData();
-        $uri = Config::getApiUrl($endpoint, (int) $version);
-
-        /** @var Curl $curl */
-        $curl = Config::getCurl();
-
-        if (Config::getCAInfoLocation()) {
-            // set a custom CAInfo file
-            $curl->setOpt(CURLOPT_CAINFO, Config::getCAInfoLocation());
-        }
-
-        if (!empty($auth)) {
-            $curl->setBasicAuthentication($auth['username'], $auth['password']);
-        }
-
-
-        $curl->setOpt(CURLOPT_SSL_VERIFYPEER, Config::getVerifyPeer());
-
-        $result = $curl->post($uri, $data);
-
-        if (isset($result->status) && $result->status === 'FALSE') {
-            throw new Error\Api($result->error);
-        }
-
-        if ($curl->error) {
-            throw new Error\Error($curl->errorMessage);
-        }
-
-        return $this->processResult($result);
+        $this->client = $client;
+        return $this;
     }
 
     /**
-     * @return array
-     * @throws Error\Required\ApiToken
-     * @throws Error\Required\ServiceId
+     * @return GuzzleClient
      */
-    protected function getData()
+    public function getClient(): GuzzleClient
     {
-        if ($this->isServiceIdRequired()) {
-            Helper::requireServiceId();
-
-            $this->data['serviceId'] = Config::getServiceId();
-        }
-        return $this->data;
+        return $this->client;
     }
 
     /**
-     * @return array|null
+     * @return AuthAdapterInterface
      */
-    private function getAuth()
+    public function getAuthAdapter(): AuthAdapterInterface
     {
-        if (!$this->isApiTokenRequired()) {
-            return null;
-        }
-
-        Helper::requireApiToken();
-        $tokenCode = Config::getTokenCode();
-        $apiToken = Config::getApiToken();
-        if (!$tokenCode) {
-            $this->data['token'] = $apiToken;
-            return null;
-        }
-        return array('username' => $tokenCode, 'password' => $apiToken);
+        return $this->authAdapter;
     }
 
     /**
-     * @return bool
-     */
-    public function isApiTokenRequired()
-    {
-        return $this->apiTokenRequired;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isServiceIdRequired()
-    {
-        return $this->serviceIdRequired;
-    }
-
-    /**
-     * @param object|array $result
+     * @param AuthAdapterInterface $adapter
      *
-     * @return array
-     * @throws Error\Api
+     * @return Api
      */
-    protected function processResult($result)
+    protected function setAuthAdapter(AuthAdapterInterface $adapter): self
     {
-        $output = Helper::objectToArray($result);
+        $this->authAdapter = $adapter;
+        return $this;
+    }
 
-        if (! is_array($output)) {
-            throw new Error\Api($output);
+    /**
+     * Handle the actual request by executing it and return the populated response object
+     *
+     * @param RequestInterface $request
+     * @param Response $response
+     *
+     * @return Response
+     */
+    public function doHandle(RequestInterface $request, Response $response): Response
+    {
+        $format = $request->getFormat();
+
+        $this->dumpDebugInfo('Requested format: ' . $format);
+
+        $request->applyClient($this->getClient());
+
+        // apply the correct headers based on the formats set on request and response object
+        //  and also add the authentication header which is based on the authentication adapter
+        $contentTypeHeader = 'application/json';
+        if (ResponseInterface::FORMAT_XML === $format) {
+            $contentTypeHeader = 'application/xml';
         }
 
-        if (isset($output['result'])) {
-            return $output;
+        $format = $response->getFormat();
+        $acceptHeader = 'application/json';
+        if (RequestInterface::FORMAT_XML === $format) {
+            $acceptHeader = 'application/xml';
         }
 
-        if (
-            isset($output['request']) &&
-            $output['request']['result'] != 1 &&
-            $output['request']['result'] !== 'TRUE') {
-            throw new Error\Api($output['request']['errorId'] . ' - ' . $output['request']['errorMessage']);
+
+        if ($request instanceof AbstractRequest) {
+            $request->setHeader(RequestInterface::HEADER_ACCEPT, $acceptHeader)
+                ->setHeader(RequestInterface::HEADER_CONTENT_TYPE, $contentTypeHeader)
+                ->setHeader(RequestInterface::HEADER_AUTHORIZATION, $this->getAuthAdapter()->getHeaderString())
+            ;
         }
 
-        return $output;
+        $request->execute($response);
+
+        return $response;
     }
 }

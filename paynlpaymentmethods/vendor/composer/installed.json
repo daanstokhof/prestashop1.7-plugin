@@ -1,42 +1,151 @@
 [
     {
-        "name": "paynl/sdk",
-        "version": "v1.5.8",
-        "version_normalized": "1.5.8.0",
+        "name": "doctrine/collections",
+        "version": "1.6.5",
+        "version_normalized": "1.6.5.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/paynl/sdk.git",
-            "reference": "c21dff94cace15b94655116cf2d3c93eed2b1a3c"
+            "url": "https://github.com/doctrine/collections.git",
+            "reference": "fc0206348e17e530d09463fef07ba8968406cd6d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/paynl/sdk/zipball/c21dff94cace15b94655116cf2d3c93eed2b1a3c",
-            "reference": "c21dff94cace15b94655116cf2d3c93eed2b1a3c",
+            "url": "https://api.github.com/repos/doctrine/collections/zipball/fc0206348e17e530d09463fef07ba8968406cd6d",
+            "reference": "fc0206348e17e530d09463fef07ba8968406cd6d",
             "shasum": ""
         },
         "require": {
-            "ext-json": "*",
-            "php-curl-class/php-curl-class": "^8.3"
+            "php": "^7.1.3 || ^8.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "^4.8",
-            "satooshi/php-coveralls": "~1.0"
+            "doctrine/coding-standard": "^6.0",
+            "phpstan/phpstan-shim": "^0.9.2",
+            "phpunit/phpunit": "^7.0",
+            "vimeo/psalm": "^3.8.1"
         },
-        "time": "2019-02-01T15:13:13+00:00",
+        "time": "2020-05-25T19:24:35+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Paynl\\": "src/"
+                "Doctrine\\Common\\Collections\\": "lib/Doctrine/Common/Collections"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
         "authors": [
             {
-                "name": "Andy Pieters",
-                "email": "andy@pay.nl"
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com"
+            },
+            {
+                "name": "Johannes Schmitt",
+                "email": "schmittjoh@gmail.com"
             }
+        ],
+        "description": "PHP Doctrine Collections library that adds additional functionality on top of PHP arrays.",
+        "homepage": "https://www.doctrine-project.org/projects/collections.html",
+        "keywords": [
+            "array",
+            "collections",
+            "iterators",
+            "php"
         ]
+    },
+    {
+        "name": "paynl/sdk",
+        "version": "dev-feature/v2",
+        "version_normalized": "dev-feature/v2",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/paynl/sdk.git",
+            "reference": "ace1222018c068cc485080c7a4f1bb0e2b2ddaf7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/paynl/sdk/zipball/ace1222018c068cc485080c7a4f1bb0e2b2ddaf7",
+            "reference": "ace1222018c068cc485080c7a4f1bb0e2b2ddaf7",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/collections": "^1.6",
+            "ext-curl": "*",
+            "ext-json": "*",
+            "php": "^7.1",
+            "psr/container": "^1.0",
+            "psr/http-message": "~1.0",
+            "ralouphie/getallheaders": "^2.0.5 || ^3.0.0",
+            "symfony/serializer": "^4.3",
+            "zendframework/zend-filter": "^2.9",
+            "zendframework/zend-hydrator": "^2.4"
+        },
+        "require-dev": {
+            "codeception/codeception": "^3.0",
+            "codeception/mockery-module": "^0.4.0",
+            "codeception/verify": "^1.1",
+            "ext-simplexml": "*",
+            "guzzlehttp/guzzle": "^6.3",
+            "humbug/php-scoper": "^0.11.4",
+            "phpmd/phpmd": "^2.7",
+            "phpstan/phpstan": "^0.11.12",
+            "roave/security-advisories": "dev-master",
+            "squizlabs/php_codesniffer": "^3.4",
+            "symfony/var-dumper": "^4.3"
+        },
+        "suggest": {
+            "codeception/codeception": "For executing the package tests",
+            "filp/whoops": "For enhanced exception handling",
+            "symfony/var-dumper": "Allows another level of debugging within the application"
+        },
+        "time": "2020-05-28T13:46:30+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "PayNL\\Sdk\\": "src/",
+                "PayNL\\GuzzleHttp\\": "build/guzzle/src",
+                "PayNL\\GuzzleHttp\\Promise\\": "build/promises/src",
+                "PayNL\\GuzzleHttp\\Psr7\\": "build/psr7/src"
+            },
+            "files": [
+                "./src/Resources/functions/text.php",
+                "./src/Resources/functions/vat.php",
+                "./build/guzzle/src/functions_include.php",
+                "./build/promises/src/functions_include.php",
+                "./build/psr7/src/functions_include.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "proprietary"
+        ],
+        "authors": [
+            {
+                "name": "Ian Sneep",
+                "email": "ian@pay.nl"
+            }
+        ],
+        "description": "Software Development Kit for implementing PayNL's REST API",
+        "homepage": "https://github.com/paynl/sdk"
     },
     {
         "name": "php-curl-class/php-curl-class",
@@ -106,5 +215,474 @@
             "web-service",
             "xml"
         ]
+    },
+    {
+        "name": "psr/container",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/container.git",
+            "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+            "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2017-02-14T16:28:37+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Container\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common Container Interface (PHP FIG PSR-11)",
+        "homepage": "https://github.com/php-fig/container",
+        "keywords": [
+            "PSR-11",
+            "container",
+            "container-interface",
+            "container-interop",
+            "psr"
+        ]
+    },
+    {
+        "name": "psr/http-message",
+        "version": "1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/http-message.git",
+            "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+            "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-08-06T14:39:51+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Psr\\Http\\Message\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "PHP-FIG",
+                "homepage": "http://www.php-fig.org/"
+            }
+        ],
+        "description": "Common interface for HTTP messages",
+        "homepage": "https://github.com/php-fig/http-message",
+        "keywords": [
+            "http",
+            "http-message",
+            "psr",
+            "psr-7",
+            "request",
+            "response"
+        ]
+    },
+    {
+        "name": "ralouphie/getallheaders",
+        "version": "3.0.3",
+        "version_normalized": "3.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ralouphie/getallheaders.git",
+            "reference": "120b605dfeb996808c31b6477290a714d356e822"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ralouphie/getallheaders/zipball/120b605dfeb996808c31b6477290a714d356e822",
+            "reference": "120b605dfeb996808c31b6477290a714d356e822",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.6"
+        },
+        "require-dev": {
+            "php-coveralls/php-coveralls": "^2.1",
+            "phpunit/phpunit": "^5 || ^6.5"
+        },
+        "time": "2019-03-08T08:55:37+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/getallheaders.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Ralph Khattar",
+                "email": "ralph.khattar@gmail.com"
+            }
+        ],
+        "description": "A polyfill for getallheaders."
+    },
+    {
+        "name": "symfony/polyfill-ctype",
+        "version": "v1.17.0",
+        "version_normalized": "1.17.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/polyfill-ctype.git",
+            "reference": "e94c8b1bbe2bc77507a1056cdb06451c75b427f9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e94c8b1bbe2bc77507a1056cdb06451c75b427f9",
+            "reference": "e94c8b1bbe2bc77507a1056cdb06451c75b427f9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "suggest": {
+            "ext-ctype": "For best performance"
+        },
+        "time": "2020-05-12T16:14:59+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.17-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Polyfill\\Ctype\\": ""
+            },
+            "files": [
+                "bootstrap.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Gert de Pagter",
+                "email": "BackEndTea@gmail.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony polyfill for ctype functions",
+        "homepage": "https://symfony.com",
+        "keywords": [
+            "compatibility",
+            "ctype",
+            "polyfill",
+            "portable"
+        ]
+    },
+    {
+        "name": "symfony/serializer",
+        "version": "v4.4.8",
+        "version_normalized": "4.4.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/serializer.git",
+            "reference": "067b6a064ffc53b48d3854c7b408b1ea26017a50"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/serializer/zipball/067b6a064ffc53b48d3854c7b408b1ea26017a50",
+            "reference": "067b6a064ffc53b48d3854c7b408b1ea26017a50",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^7.1.3",
+            "symfony/polyfill-ctype": "~1.8"
+        },
+        "conflict": {
+            "phpdocumentor/type-resolver": "<0.2.1",
+            "symfony/dependency-injection": "<3.4",
+            "symfony/property-access": "<3.4",
+            "symfony/property-info": "<3.4",
+            "symfony/yaml": "<3.4"
+        },
+        "require-dev": {
+            "doctrine/annotations": "~1.0",
+            "doctrine/cache": "~1.0",
+            "phpdocumentor/reflection-docblock": "^3.2|^4.0",
+            "symfony/cache": "^3.4|^4.0|^5.0",
+            "symfony/config": "^3.4|^4.0|^5.0",
+            "symfony/dependency-injection": "^3.4|^4.0|^5.0",
+            "symfony/error-handler": "^4.4|^5.0",
+            "symfony/http-foundation": "^3.4|^4.0|^5.0",
+            "symfony/mime": "^4.4|^5.0",
+            "symfony/property-access": "^3.4|^4.0|^5.0",
+            "symfony/property-info": "^3.4.13|~4.0|^5.0",
+            "symfony/validator": "^3.4|^4.0|^5.0",
+            "symfony/yaml": "^3.4|^4.0|^5.0"
+        },
+        "suggest": {
+            "doctrine/annotations": "For using the annotation mapping. You will also need doctrine/cache.",
+            "doctrine/cache": "For using the default cached annotation reader and metadata cache.",
+            "psr/cache-implementation": "For using the metadata cache.",
+            "symfony/config": "For using the XML mapping loader.",
+            "symfony/http-foundation": "For using a MIME type guesser within the DataUriNormalizer.",
+            "symfony/property-access": "For using the ObjectNormalizer.",
+            "symfony/property-info": "To deserialize relations.",
+            "symfony/yaml": "For using the default YAML mapping loader."
+        },
+        "time": "2020-04-12T16:14:02+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "4.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Symfony\\Component\\Serializer\\": ""
+            },
+            "exclude-from-classmap": [
+                "/Tests/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Serializer Component",
+        "homepage": "https://symfony.com"
+    },
+    {
+        "name": "zendframework/zend-filter",
+        "version": "2.9.2",
+        "version_normalized": "2.9.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/zendframework/zend-filter.git",
+            "reference": "d78f2cdde1c31975e18b2a0753381ed7b61118ef"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/zendframework/zend-filter/zipball/d78f2cdde1c31975e18b2a0753381ed7b61118ef",
+            "reference": "d78f2cdde1c31975e18b2a0753381ed7b61118ef",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.6 || ^7.0",
+            "zendframework/zend-stdlib": "^2.7.7 || ^3.1"
+        },
+        "conflict": {
+            "zendframework/zend-validator": "<2.10.1"
+        },
+        "require-dev": {
+            "pear/archive_tar": "^1.4.3",
+            "phpunit/phpunit": "^5.7.23 || ^6.4.3",
+            "psr/http-factory": "^1.0",
+            "zendframework/zend-coding-standard": "~1.0.0",
+            "zendframework/zend-crypt": "^3.2.1",
+            "zendframework/zend-servicemanager": "^2.7.8 || ^3.3",
+            "zendframework/zend-uri": "^2.6"
+        },
+        "suggest": {
+            "psr/http-factory-implementation": "psr/http-factory-implementation, for creating file upload instances when consuming PSR-7 in file upload filters",
+            "zendframework/zend-crypt": "Zend\\Crypt component, for encryption filters",
+            "zendframework/zend-i18n": "Zend\\I18n component for filters depending on i18n functionality",
+            "zendframework/zend-servicemanager": "Zend\\ServiceManager component, for using the filter chain functionality",
+            "zendframework/zend-uri": "Zend\\Uri component, for the UriNormalize filter"
+        },
+        "time": "2019-08-19T07:08:04+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.9.x-dev",
+                "dev-develop": "2.10.x-dev"
+            },
+            "zf": {
+                "component": "Zend\\Filter",
+                "config-provider": "Zend\\Filter\\ConfigProvider"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Zend\\Filter\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "description": "Programmatically filter and normalize data and files",
+        "keywords": [
+            "ZendFramework",
+            "filter",
+            "zf"
+        ],
+        "abandoned": "laminas/laminas-filter"
+    },
+    {
+        "name": "zendframework/zend-hydrator",
+        "version": "2.4.2",
+        "version_normalized": "2.4.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/zendframework/zend-hydrator.git",
+            "reference": "2bfc6845019e7b6d38b0ab5e55190244dc510285"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/zendframework/zend-hydrator/zipball/2bfc6845019e7b6d38b0ab5e55190244dc510285",
+            "reference": "2bfc6845019e7b6d38b0ab5e55190244dc510285",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.6 || ^7.0",
+            "zendframework/zend-stdlib": "^3.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+            "zendframework/zend-coding-standard": "~1.0.0",
+            "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
+            "zendframework/zend-filter": "^2.6",
+            "zendframework/zend-inputfilter": "^2.6",
+            "zendframework/zend-serializer": "^2.6.1",
+            "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3"
+        },
+        "suggest": {
+            "zendframework/zend-eventmanager": "^2.6.2 || ^3.0, to support aggregate hydrator usage",
+            "zendframework/zend-filter": "^2.6, to support naming strategy hydrator usage",
+            "zendframework/zend-serializer": "^2.6.1, to use the SerializableStrategy",
+            "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3, to support hydrator plugin manager usage"
+        },
+        "time": "2019-10-04T11:17:36+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-release-2.4": "2.4.x-dev"
+            },
+            "zf": {
+                "component": "Zend\\Hydrator",
+                "config-provider": "Zend\\Hydrator\\ConfigProvider"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Zend\\Hydrator\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "description": "Serialize objects to arrays, and vice versa",
+        "keywords": [
+            "ZendFramework",
+            "hydrator",
+            "zf"
+        ],
+        "abandoned": "laminas/laminas-hydrator"
+    },
+    {
+        "name": "zendframework/zend-stdlib",
+        "version": "3.2.1",
+        "version_normalized": "3.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/zendframework/zend-stdlib.git",
+            "reference": "66536006722aff9e62d1b331025089b7ec71c065"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/66536006722aff9e62d1b331025089b7ec71c065",
+            "reference": "66536006722aff9e62d1b331025089b7ec71c065",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.6 || ^7.0"
+        },
+        "require-dev": {
+            "phpbench/phpbench": "^0.13",
+            "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
+            "zendframework/zend-coding-standard": "~1.0.0"
+        },
+        "time": "2018-08-28T21:34:05+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.2.x-dev",
+                "dev-develop": "3.3.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Zend\\Stdlib\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "description": "SPL extensions, array utilities, error handlers, and more",
+        "keywords": [
+            "ZendFramework",
+            "stdlib",
+            "zf"
+        ],
+        "abandoned": "laminas/laminas-stdlib"
     }
 ]

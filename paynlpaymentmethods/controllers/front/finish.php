@@ -39,7 +39,7 @@ class PaynlPaymentMethodsFinishModuleFrontController extends ModuleFrontControll
    */
     public function postProcess()
     {
-      $transactionId = $_REQUEST['orderId'];
+      $transactionId = $_REQUEST['transactionId'];
 
       $iAttempt = Tools::getValue('attempt');
 
@@ -61,7 +61,7 @@ class PaynlPaymentMethodsFinishModuleFrontController extends ModuleFrontControll
         return;
       }
 
-      $module->payLog('finishPostProcess', 'Returning to webshop', $transaction->getExtra1(), $transactionId);
+      $module->payLog('finishPostProcess', 'Returning to webshop', $transaction->getStatistics()->getExtra1(), $transactionId);
 
       if ($transaction->isPaid() || $transaction->isPending() || $transaction->isBeingVerified() || $transaction->isAuthorized()) {
             // naar success
@@ -87,7 +87,7 @@ class PaynlPaymentMethodsFinishModuleFrontController extends ModuleFrontControll
             unset($this->context->cart);
             unset($this->context->cookie->id_cart);
 
-            $cartId = $transaction->getExtra1();
+            $cartId = $transaction->getStatistics()->getExtra1();
             $orderId = Order::getIdByCartId($cartId);
 
             $this->order = $orderId;
