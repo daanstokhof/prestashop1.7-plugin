@@ -50,6 +50,9 @@ class PaynlPaymentMethods extends PaymentModule
     private $paymentMethods;
     private $payLogEnabled;
 
+    const MSG_CREDENTIALS_INVALID = 'Your credentials are invalid. Please check if you\'ve entered them correctly. You can look up your API tokens on https://admin.pay.nl/company/tokens';
+    const MSG_UNEXCEPTED_RESPONSE = 'Something unexpected happened. Please check your logs for errors or try reinstalling this plugin';
+
     public function __construct()
     {
         $this->name = 'paynlpaymentmethods';
@@ -1256,8 +1259,18 @@ class PaynlPaymentMethods extends PaymentModule
                     ]
                 )
                 ->run();
-            if($response->getStatusCode() !== 200) {
-                throw new Exception(self::MSG_CREDENTIALS_INVALID);
+            switch($response->getStatusCode()) {
+                case 401:
+                case 403:
+                    $this->adminDisplayWarning($this->l(self::MSG_CREDENTIALS_INVALID));
+                    break;
+                case 200:
+                    $loggedin = true;
+                    break;
+                case 500:
+                default:
+                    $this->adminDisplayWarning($this->l(self::MSG_UNEXCEPTED_RESPONSE));
+                    break;
             }
             $loggedin = true;
         } catch (\Exception  $e) {
@@ -1298,11 +1311,24 @@ class PaynlPaymentMethods extends PaymentModule
                         )
                         ->run();
 
-                    if($response->getStatusCode() !== 200) {
-                        throw new Exception(self::MSG_CREDENTIALS_INVALID);
+                    switch($response->getStatusCode()) {
+                        case 401:
+                        case 403:
+                            $this->adminDisplayWarning($this->l(self::MSG_CREDENTIALS_INVALID));
+                            return false;
+                        case 200:
+                            break;
+                        case 500:
+                        default:
+                            $this->adminDisplayWarning($this->l(self::MSG_UNEXCEPTED_RESPONSE));
+                            return false;
                     }
-                } catch (\Paynl\Error\Error $e) {
-                    $this->_postErrors[] = $e->getMessage();
+                } catch (Exception $e) {
+                    $msg = $e->getMessage();
+                    if(strpos($e->getMessage(), 'serviceId')) {
+                        $msg = 'ServiceId does not have the right format. You can find your serviceId here: <a href="https://admin.pay.nl/programs/programs">https://admin.pay.nl/programs/programs</a>';
+                    }
+                    $this->_postErrors[] = $msg;
                 }
             }
         }
