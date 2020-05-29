@@ -194,12 +194,35 @@ class PaynlPaymentMethods extends PaymentModule
   public function doRefund($transactionId, $amount = null, $strCurrency = null)
   {
     try {
-      $this->sdkLogin();
-      $result = true;
-      $refundResult = \Paynl\Transaction::refund($transactionId, $amount, null, null, $strCurrency);
+        $app = $this->init();
+
+        $response = $app
+            ->setRequest(
+                'RefundTransaction',
+                [
+                    'transactionId' => $transactionId,
+                ],
+                null,
+                [
+                    'Refund' => [
+                        'amount' => [
+                            'amount' => $amount,
+                            'currency' => $strCurrency,
+                        ],
+                        'processDate' => (new DateTime())->sub(new DateInterval('P2D'))->format(DateTime::ATOM),
+                    ],
+                ]
+            )
+            ->run()
+        ;
+        if($response->getStatusCode() !== 200) {
+            throw new Exception('Refund failed');
+        }
+
+        $result = true;
     } catch (Exception $objException) {
-      $refundResult = $objException->getMessage();
-      $result = false;
+        $refundResult = $objException->getMessage();
+        $result = false;
     }
 
     return array('result' => $result, 'data' => $refundResult);
