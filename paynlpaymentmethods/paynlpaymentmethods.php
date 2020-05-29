@@ -33,6 +33,7 @@ if (!class_exists('\PayNL\Sdk\Api\Api')) {
 
 
 use Paynl\Result\Transaction\Refund;
+use PayNL\Sdk\Application\Application;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 if (!defined('_PS_VERSION_')) {
@@ -1243,7 +1244,7 @@ class PaynlPaymentMethods extends PaymentModule
             $this->_html .= '<br />';
         }
         $loggedin = false;
-        if (!class_exists('\Paynl\Paymentmethods')) {
+        if (!class_exists('\PayNL\Sdk\Api\Api')) {
             $this->adminDisplayWarning($this->l('Cannot find PAY. SDK, did you install the source code instead of the package?'));
 
             return false;
