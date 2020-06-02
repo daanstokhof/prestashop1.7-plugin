@@ -37,8 +37,8 @@ class PaynlPaymentMethodsExchangeModuleFrontController extends ModuleFrontContro
         $transactionId = $_REQUEST['transactionId'];
 
         # PAY. action
-        $action = Tools::getValue('action');
-        $cartid = Tools::getValue('extra1');
+        $action = Tools::getValue('action', 'unknown');
+        $cartid = Tools::getValue('extra1', 'unknown');
 
         /**
         * @var $module PaynlPaymentMethods

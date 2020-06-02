@@ -41,13 +41,13 @@ class PaynlPaymentMethodsFinishModuleFrontController extends ModuleFrontControll
     {
       $transactionId = $_REQUEST['transactionId'];
 
-      $iAttempt = Tools::getValue('attempt');
+      $iAttempt = Tools::getValue('attempt', 'unknown');
 
       $bValidationDelay = Configuration::get('PAYNL_VALIDATION_DELAY') == 1;
 
       $this->payOrderId = $transactionId;
-      $this->orderStatusId = Tools::getValue('orderStatusId');
-      $this->paymentSessionId = Tools::getValue('paymentSessionId');
+      $this->orderStatusId = Tools::getValue('orderStatusId', 'unknown');
+      $this->paymentSessionId = Tools::getValue('paymentSessionId', 'unknown');
 
       /**
        * @var $module PaynlPaymentMethods
@@ -56,6 +56,9 @@ class PaynlPaymentMethodsFinishModuleFrontController extends ModuleFrontControll
 
       try {
         $transaction = $module->getTransaction($transactionId);
+        if(!$transaction) {
+            throw new Exception('transaction not found');
+        }
       } catch (Exception $e) {
         $module->payLog('finishPostProcess', 'Could not retrieve transaction', null, $transactionId);
         return;

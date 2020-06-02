@@ -136,9 +136,12 @@ class PaynlPaymentMethods extends PaymentModule
 
     try {
       $transaction = $this->getTransaction($transactionId);
-      $arrTransactionDetails = $transaction->getData();
-      $status = $arrTransactionDetails['paymentDetails']['stateName'];
-      $method = $arrTransactionDetails['paymentDetails']['paymentProfileName'];
+      if(!$transaction) {
+          $this->adminDisplayWarning('PAY. Transaction not found. Please contact PAY. support.');
+          throw new Exception('PAY. transaction not found');
+      }
+      $status = $transaction->getStatus()->getName();
+      $method = $transaction->getPaymentMethod()->getName();
       $showRefundButton = $transaction->isPaid() || $transaction->isPartiallyRefunded();
     } catch (Exception $exception) {
       $showRefundButton = false;
@@ -575,6 +578,10 @@ class PaynlPaymentMethods extends PaymentModule
     public function processPayment($transactionId, &$message = null)
     {
         $transaction = $this->getTransaction($transactionId);
+        if(!$transaction) {
+            $this->adminDisplayWarning('PAY. Transaction not found. Please contact PAY. support.');
+            throw new Exception('PAY. transaction not found');
+        }
         $arrPayData = $transaction->getData();
 
         $iOrderState = $this->statusPending;
@@ -583,7 +590,7 @@ class PaynlPaymentMethods extends PaymentModule
         } elseif ($transaction->isCanceled()) {
             $iOrderState = $this->statusCanceled;
         }
-        if ($transaction->isRefunded(false)) {
+        if ($transaction->isRefundedCustomer(false)) {
             $iOrderState = $this->statusRefund;
         }
 
@@ -617,7 +624,7 @@ class PaynlPaymentMethods extends PaymentModule
               return $transaction;
             }
 
-            if ($order->hasBeenPaid() && !$transaction->isRefunded(false)) {
+            if ($order->hasBeenPaid() && !$transaction->isRefundedCustomer(false)) {
                 $message = 'Order is already paid | OrderReference: ' . $order->reference;
 
                 return $transaction;
@@ -732,6 +739,10 @@ class PaynlPaymentMethods extends PaymentModule
             ])
             ->run()
         ;
+
+        if($response->getStatusCode() !== 200) {
+            return false;
+        }
 
         return $response->getBody();
     }
