@@ -51,8 +51,9 @@ class PaynlPaymentMethods extends PaymentModule
     private $paymentMethods;
     private $payLogEnabled;
 
-    const MSG_CREDENTIALS_INVALID = 'Your credentials are invalid. Please check if you\'ve entered them correctly. You can look up your API tokens on https://admin.pay.nl/company/tokens';
-    const MSG_UNEXCEPTED_RESPONSE = 'Something unexpected happened. Please check your logs for errors or try reinstalling this plugin';
+    private const MSG_CREDENTIALS_INVALID = 'Your credentials are invalid. Please check if you\'ve entered them correctly. You can look up your API tokens on https://admin.pay.nl/company/tokens';
+    private const MSG_INSUFFICIENT_RIGHTS = 'The API token your using doesn\'t have the necessary rights to communicate with our API. You can assign rights to your API tokens on https://admin.pay.nl/company/tokens';
+    private const MSG_UNEXCEPTED_RESPONSE = 'Something unexpected happened. Please check your logs for errors or try reinstalling this plugin';
 
     public function __construct()
     {
@@ -1262,8 +1263,9 @@ class PaynlPaymentMethods extends PaymentModule
                 ->run();
             switch($response->getStatusCode()) {
                 case 401:
-                case 403:
                     $this->adminDisplayWarning($this->l(self::MSG_CREDENTIALS_INVALID));
+                case 403:
+                    $this->adminDisplayWarning($this->l(self::MSG_INSUFFICIENT_RIGHTS));
                     break;
                 case 200:
                     $loggedin = true;
@@ -1273,7 +1275,6 @@ class PaynlPaymentMethods extends PaymentModule
                     $this->adminDisplayWarning($this->l(self::MSG_UNEXCEPTED_RESPONSE));
                     break;
             }
-            $loggedin = true;
         } catch (\Exception  $e) {
 
         }
@@ -1314,9 +1315,10 @@ class PaynlPaymentMethods extends PaymentModule
 
                     switch($response->getStatusCode()) {
                         case 401:
-                        case 403:
                             $this->adminDisplayWarning($this->l(self::MSG_CREDENTIALS_INVALID));
-                            return false;
+                        case 403:
+                            $this->adminDisplayWarning($this->l(self::MSG_INSUFFICIENT_RIGHTS));
+                            break;
                         case 200:
                             break;
                         case 500:
