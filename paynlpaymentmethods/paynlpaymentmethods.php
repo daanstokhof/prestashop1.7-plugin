@@ -1282,6 +1282,7 @@ class PaynlPaymentMethods extends PaymentModule
             switch($response->getStatusCode()) {
                 case 401:
                     $this->adminDisplayWarning($this->l(self::MSG_CREDENTIALS_INVALID));
+                    break;
                 case 403:
                     $this->adminDisplayWarning($this->l(self::MSG_INSUFFICIENT_RIGHTS));
                     break;
@@ -1334,6 +1335,7 @@ class PaynlPaymentMethods extends PaymentModule
                     switch($response->getStatusCode()) {
                         case 401:
                             $this->adminDisplayWarning($this->l(self::MSG_CREDENTIALS_INVALID));
+                            break;
                         case 403:
                             $this->adminDisplayWarning($this->l(self::MSG_INSUFFICIENT_RIGHTS));
                             break;
