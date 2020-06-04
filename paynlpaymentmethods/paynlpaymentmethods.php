@@ -224,7 +224,15 @@ class PaynlPaymentMethods extends PaymentModule
             ->run()
         ;
         if($response->getStatusCode() !== 200) {
-            throw new Exception('Refund failed');
+            $strMessage = 'unknown error';
+            $errors = $response->getErrors();
+            if(is_array($errors)) {
+                $strMessage = array_shift($errors);
+            }elseif(is_string($errors)) {
+                $strMessage = $errors;
+            }
+
+            throw new Exception($strMessage);
         }
 
         $result = true;
@@ -582,7 +590,6 @@ class PaynlPaymentMethods extends PaymentModule
             $this->adminDisplayWarning('PAY. Transaction not found. Please contact PAY. support.');
             throw new Exception('PAY. transaction not found');
         }
-        $arrPayData = $transaction->getData();
 
         $iOrderState = $this->statusPending;
         if ($transaction->isPaid() || $transaction->isAuthorized()) {
@@ -648,10 +655,10 @@ class PaynlPaymentMethods extends PaymentModule
 
             $orderPayment->payment_method = $transaction->getPaymentMethod()->getName();
 
-            $orderPayment->amount = $transaction->getCurrencyAmount() / 100;
+            $orderPayment->amount = $transaction->getAmount()->getAmount() / 100;
 
             if($transaction->isAuthorized()){
-                $orderPayment->amount =  $transaction->getCurrencyAmount() / 100;
+                $orderPayment->amount =  $transaction->getAmount()->getAmount() / 100;
             }
 
             $orderPayment->transaction_id = $transactionId;
@@ -675,9 +682,9 @@ class PaynlPaymentMethods extends PaymentModule
             {
               $this->payLog('processPayment', 'orderStateName:' . $orderStateName . '. iOrderState: ' . $iOrderState . '. iState:' . $iState, $cartId, $transactionId);
 
-                $amountPaid = $amountPaid = $transaction->getCurrencyAmount() / 100;
+                $amountPaid = $amountPaid = $transaction->getAmount()->getAmount() / 100;
                 if($transaction->isAuthorized()){
-                    $amountPaid = $amountPaid = $transaction->getCurrencyAmount() / 100;
+                    $amountPaid = $amountPaid = $transaction->getAmount()->getAmount() / 100;
                 }
 
                 try {
@@ -699,7 +706,7 @@ class PaynlPaymentMethods extends PaymentModule
 
                     $this->payLog('processPayment', 'Creating ORDER for ppid ' . $profileId . '. Status: ' . $orderStateName . '. Method: ' . $paymentMethodName, $cartId, $transactionId);
 
-                    $this->validateOrder((int)$transaction->getExtra1(), $iOrderState,
+                    $this->validateOrder((int)$transaction->getStatistics()->getExtra1(), $iOrderState,
                       $amountPaid, $paymentMethodName, null, array('transaction_id' => $transactionId), null, false, $cart->secure_key);
 
                     /** @var OrderCore $orderId */
