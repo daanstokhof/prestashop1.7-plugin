@@ -12,14 +12,15 @@ use PayNL\Sdk\Common\JsonSerializeTrait;
  *
  * @package PayNL\Sdk\Model
  */
-class Voucher implements ModelInterface, JsonSerializable
+class Voucher implements
+    ModelInterface,
+    Member\LinksAwareInterface,
+    Member\AmountAwareInterface,
+    JsonSerializable
 {
-    use JsonSerializeTrait, LinksTrait;
-
-    /**
-     * @var Amount
-     */
-    protected $amount;
+    use Member\LinksAwareTrait;
+    use Member\AmountAwareTrait;
+    use JsonSerializeTrait;
 
     /**
      * @var string
@@ -32,23 +33,14 @@ class Voucher implements ModelInterface, JsonSerializable
     protected $posId;
 
     /**
-     * @return Amount
+     * @var int
      */
-    public function getAmount(): Amount
-    {
-        return $this->amount;
-    }
+    protected $balance;
 
     /**
-     * @param Amount $amount
-     *
-     * @return Voucher
+     * @var string
      */
-    public function setAmount(Amount $amount): Voucher
-    {
-        $this->amount = $amount;
-        return $this;
-    }
+    protected $number;
 
     /**
      * @return string
@@ -85,6 +77,41 @@ class Voucher implements ModelInterface, JsonSerializable
     public function setPosId(string $posId): Voucher
     {
         $this->posId = $posId;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getBalance(): ?int
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param int $balance
+     *
+     * @return Voucher
+     */
+    public function setBalance(int $balance): Voucher
+    {
+        $this->balance = $balance;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getNumber(): ?string {
+        return $this->number;
+    }
+
+    /**
+     * @param string $number
+     * @return Voucher
+     */
+    public function setNumber(string $number): Voucher {
+        $this->number = $number;
         return $this;
     }
 }

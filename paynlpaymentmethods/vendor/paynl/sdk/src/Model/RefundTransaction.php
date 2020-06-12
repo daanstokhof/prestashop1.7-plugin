@@ -9,12 +9,11 @@ namespace PayNL\Sdk\Model;
  *
  * @package PayNL\Sdk\Model
  */
-class RefundTransaction implements ModelInterface
+class RefundTransaction implements
+    ModelInterface,
+    Member\AmountAwareInterface
 {
-    /**
-     * @var Amount
-     */
-    protected $amount;
+    use Member\AmountAwareTrait;
 
     /**
      * @var Amount
@@ -27,29 +26,18 @@ class RefundTransaction implements ModelInterface
     protected $refund;
 
     /**
-     * @return Amount
+     * @var Voucher
      */
-    public function getAmount(): Amount
-    {
-        return $this->amount;
-    }
-
-    /**
-     * @param Amount $amount
-     *
-     * @return RefundTransaction
-     */
-    public function setAmount(Amount $amount): self
-    {
-        $this->amount = $amount;
-        return $this;
-    }
+    protected $voucher;
 
     /**
      * @return Amount
      */
     public function getAmountRefunded(): Amount
     {
+        if (null === $this->amountRefunded) {
+            $this->setAmountRefunded(new Amount());
+        }
         return $this->amountRefunded;
     }
 
@@ -69,6 +57,9 @@ class RefundTransaction implements ModelInterface
      */
     public function getRefund(): Refund
     {
+        if (null === $this->refund) {
+            $this->setRefund(new Refund());
+        }
         return $this->refund;
     }
 
@@ -80,6 +71,22 @@ class RefundTransaction implements ModelInterface
     public function setRefund(Refund $refund): self
     {
         $this->refund = $refund;
+        return $this;
+    }
+
+    /**
+     * @return Voucher|null
+     */
+    public function getVoucher(): ?Voucher {
+        return $this->voucher;
+    }
+
+    /**
+     * @param Voucher $voucher
+     * @return RefundTransaction
+     */
+    public function setVoucher(Voucher $voucher): RefundTransaction {
+        $this->voucher = $voucher;
         return $this;
     }
 }

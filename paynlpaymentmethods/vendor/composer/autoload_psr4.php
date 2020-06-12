@@ -18,5 +18,4 @@ return array(
     'PayNL\\GuzzleHttp\\Promise\\' => array($vendorDir . '/paynl/sdk/build/promises/src'),
     'PayNL\\GuzzleHttp\\' => array($vendorDir . '/paynl/sdk/build/guzzle/src'),
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib/Doctrine/Common/Collections'),
-    'Curl\\' => array($vendorDir . '/php-curl-class/php-curl-class/src/Curl'),
 );

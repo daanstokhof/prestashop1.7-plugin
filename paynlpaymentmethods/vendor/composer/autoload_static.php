@@ -41,10 +41,6 @@ class ComposerStaticInita3a46c0e362da920ffeb331fe601b182
         array (
             'Doctrine\\Common\\Collections\\' => 28,
         ),
-        'C' => 
-        array (
-            'Curl\\' => 5,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -95,10 +91,6 @@ class ComposerStaticInita3a46c0e362da920ffeb331fe601b182
         'Doctrine\\Common\\Collections\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/collections/lib/Doctrine/Common/Collections',
-        ),
-        'Curl\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/php-curl-class/php-curl-class/src/Curl',
         ),
     );
 

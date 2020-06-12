@@ -118,4 +118,68 @@ class VoucherTest extends UnitTest
         verify($this->model->getPosId())->notEmpty();
         verify($this->model->getPosId())->equals('1234');
     }
+
+    /**
+     * @return void
+     */
+    public function testItCanSetBalance(): void
+    {
+        $this->tester->assertObjectHasMethod('setBalance', $this->model);
+        $this->tester->assertObjectMethodIsPublic('setBalance', $this->model);
+
+        $voucher = $this->model->setBalance(400);
+        verify($voucher)->isInstanceOf(Voucher::class);
+        verify($voucher)->same($this->model);
+    }
+
+    /**
+     * @depends testItCanSetBalance
+     *
+     * @return void
+     */
+    public function testItCanGetBalance(): void
+    {
+        $this->tester->assertObjectHasMethod('getBalance', $this->model);
+        $this->tester->assertObjectMethodIsPublic('getBalance', $this->model);
+
+        verify($this->model->getBalance())->null();
+
+        $this->model->setBalance(400);
+        $balance = $this->model->getBalance();
+        verify($balance)->int();
+        verify($balance)->notEmpty();
+        verify($balance)->equals(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testItCanSetNumber(): void
+    {
+        $this->tester->assertObjectHasMethod('setNumber', $this->model);
+        $this->tester->assertObjectMethodIsPublic('setNumber', $this->model);
+
+        $voucher = $this->model->setNumber('foo');
+        verify($voucher)->isInstanceOf(Voucher::class);
+        verify($voucher)->same($this->model);
+    }
+
+    /**
+     * @depends testItCanSetNumber
+     *
+     * @return void
+     */
+    public function testItCanGetNumber(): void
+    {
+        $this->tester->assertObjectHasMethod('getNumber', $this->model);
+        $this->tester->assertObjectMethodIsPublic('getNumber', $this->model);
+
+        verify($this->model->getNumber())->null();
+
+        $this->model->setNumber('foo');
+        $balance = $this->model->getNumber();
+        verify($balance)->string();
+        verify($balance)->notEmpty();
+        verify($balance)->equals('foo');
+    }
 }
