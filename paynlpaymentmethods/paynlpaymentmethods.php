@@ -235,6 +235,9 @@ class PaynlPaymentMethods extends PaymentModule
             throw new Exception($strMessage);
         }
 
+        /** @var \PayNL\Sdk\Model\RefundOverview $refundResult */
+        $refundResult = $response->getBody();
+
         $result = true;
     } catch (Exception $objException) {
         $refundResult = $objException->getMessage();

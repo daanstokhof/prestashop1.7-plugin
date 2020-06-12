@@ -30,65 +30,73 @@
 class PaynlPaymentMethodsAjaxModuleFrontController extends ModuleFrontController
 {
 
-  public function initContent()
-  {
-    $prestaorderid = Tools::getValue('prestaorderid');
-    $amount = Tools::getValue('amount');
-
-    /**
-     * @var $module PaynlPaymentMethods
-     */
-    $module = $this->module;
-
-    try {
-      $order = new Order($prestaorderid);
-    } catch (Exception $e) {
-      $module->payLog('Refund', 'Failed trying to refund ' . $amount . ' on ps-orderid ' . $prestaorderid . ' Order not found. Errormessage: ' . $e->getMessage());
-      $this->returnResponse(false, 0, 'Could not find order');
-    }
-
-    $paymenyArr = $order->getOrderPayments();
-    $orderPayment = reset($paymenyArr);
-    $transactionId = $orderPayment->transaction_id;
-
-    $currencyId = $orderPayment->id_currency;
-    $currency = new Currency($currencyId);
-    $strCurrency = $currency->iso_code;
-
-    $cartId = !empty($order->id_cart) ? $order->id_cart : null;
-
-    $module->payLog('Refund', 'Trying to refund ' . $amount . ' ' . $strCurrency . ' on prestashop-orderid ' . $prestaorderid, $cartId, $transactionId);
-
-    $arrRefundResult = $module->doRefund($transactionId, $amount, $strCurrency);
-    $refundResult = $arrRefundResult['data'];
-
-    if ($arrRefundResult['result'])
+    public function initContent()
     {
-      $arrResult = $refundResult->getData();
-      $amountRefunded = !empty($arrResult['amountRefunded']) ? $arrResult['amountRefunded'] : '';
+        $prestaorderid = Tools::getValue('prestaorderid');
+        $amount = (int)(Tools::getValue('amount') * 100);
 
-      $desc = !empty($arrResult['description']) ? $arrResult['description'] : 'empty';
-      $module->payLog('Refund', 'Refund success, result message: ' . $desc, $cartId, $transactionId);
+        /**
+         * @var $module PaynlPaymentMethods
+         */
+        $module = $this->module;
 
-      $this->returnResponse(true, $amountRefunded, 'succesfully_refunded ' . $strCurrency . ' ' . $amount);
-    } else {
-      $module->payLog('Refund', 'Refund failed: ' . $refundResult, $cartId, $transactionId);
-      $this->returnResponse(false, 0, 'could_not_process_refund');
+        try {
+            $order = new Order($prestaorderid);
+        } catch (Exception $e) {
+            $module->payLog(
+                'Refund',
+                'Failed trying to refund ' . $amount . ' on ps-orderid ' . $prestaorderid . ' Order not found. Errormessage: ' . $e->getMessage(
+                )
+            );
+            $this->returnResponse(false, 0, 'Could not find order');
+        }
+
+        $paymenyArr = $order->getOrderPayments();
+        $orderPayment = reset($paymenyArr);
+        $transactionId = $orderPayment->transaction_id;
+
+        $currencyId = $orderPayment->id_currency;
+        $currency = new Currency($currencyId);
+        $strCurrency = $currency->iso_code;
+
+        $cartId = !empty($order->id_cart) ? $order->id_cart : null;
+
+        $module->payLog(
+            'Refund',
+            'Trying to refund ' . $amount . ' ' . $strCurrency . ' on prestashop-orderid ' . $prestaorderid,
+            $cartId,
+            $transactionId
+        );
+
+        $refundResult = $module->doRefund($transactionId, $amount, $strCurrency);
+        $refundOverview = $refundResult['data'];
+
+        if ($refundOverview instanceof RefundOverview) {
+            $refund = $refundOverview->getRefundedTransactions()[0];
+
+            $amountRefunded = $refund->getAmountRefunded()->getAmount();
+
+            $desc = $refundOverview->getDescription();
+            $module->payLog('Refund', 'Refund success, result message: ' . $desc, $cartId, $transactionId);
+
+            $this->returnResponse(true, $amountRefunded, 'succesfully_refunded ' . $strCurrency . ' ' . $amount);
+        } else {
+            $module->payLog('Refund', 'Refund failed: ' . $refundResult, $cartId, $transactionId);
+            $this->returnResponse(false, 0, 'could_not_process_refund');
+        }
     }
 
-  }
+    private function returnResponse($result, $amountRefunded = '', $message = '')
+    {
+        header('Content-Type: application/json;charset=UTF-8');
 
-  private function returnResponse($result, $amountRefunded = '', $message = '')
-  {
-    header('Content-Type: application/json;charset=UTF-8');
+        $returnarray = array(
+            'success' => $result,
+            'amountrefunded' => $amountRefunded,
+            'message' => $message
+        );
 
-    $returnarray = array(
-      'success' => $result,
-      'amountrefunded' => $amountRefunded,
-      'message' => $message
-    );
-
-    die(json_encode($returnarray));
-  }
+        die(json_encode($returnarray));
+    }
 
 }
