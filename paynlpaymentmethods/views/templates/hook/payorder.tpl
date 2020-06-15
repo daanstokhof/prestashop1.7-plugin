@@ -26,6 +26,10 @@
         <div class="labelvalue" id="pay-currency">{$currency}</div>
         <div class="label">{$lang.amount}</div>
         <div class="labelvalue">{$amountFormatted}</div>
+        {if $amountRefunded gt 0}
+            <div class="label">{$lang.amount_refunded}</div>
+            <div class="labelvalue">{$amountRefunded}</div>
+        {/if}
     </div>
     <div>
         <hr>

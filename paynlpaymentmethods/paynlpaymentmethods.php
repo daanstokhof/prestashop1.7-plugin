@@ -133,6 +133,7 @@ class PaynlPaymentMethods extends PaymentModule
     $method = $order->payment;
     $currency = new Currency($orderPayment->id_currency);
     $transactionId = $orderPayment->transaction_id;
+    $amountRefunded = 0;
 
     try {
       $transaction = $this->getTransaction($transactionId);
@@ -143,6 +144,9 @@ class PaynlPaymentMethods extends PaymentModule
       $status = $transaction->getStatus()->getName();
       $method = $transaction->getPaymentMethod()->getName();
       $showRefundButton = $transaction->isPaid() || $transaction->isPartiallyRefunded();
+      if($transaction->getAmountRefunded()->getAmount() > 0) {
+          $amountRefunded = number_format($transaction->getAmountRefunded()->getAmount() / 100, 2, ',','.');
+      }
     } catch (Exception $exception) {
       $showRefundButton = false;
     }
@@ -159,6 +163,7 @@ class PaynlPaymentMethods extends PaymentModule
       'PrestaOrderId' => $orderId,
       'amountFormatted' => $amountFormatted,
       'amount' => $order->total_paid,
+      'amountRefunded' => $amountRefunded,
       'currency' => $currency->iso_code,
       'pay_orderid' => $transactionId,
       'status' => $status,
@@ -181,6 +186,7 @@ class PaynlPaymentMethods extends PaymentModule
     $lang['refunding'] = $this->l('Processing');
     $lang['currency'] = $this->l('Currency');
     $lang['amount'] = $this->l('Orderamount');
+    $lang['amount_refunded'] = $this->l('Amount refunded');
     $lang['invalidamount'] = $this->l('Invalid amount');
     $lang['succesfully_refunded'] = $this->l('Succesfully refunded');
     $lang['paymentmethod'] = $this->l('Paymentmethod');
