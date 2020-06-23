@@ -77,12 +77,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/sdk.git",
-                "reference": "572f842e3f25547e9424707bfe7bfd81f9d7ed1f"
+                "reference": "9bc03999c94dac1c912bad84797566c54a0a5205"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paynl/sdk/zipball/572f842e3f25547e9424707bfe7bfd81f9d7ed1f",
-                "reference": "572f842e3f25547e9424707bfe7bfd81f9d7ed1f",
+                "url": "https://api.github.com/repos/paynl/sdk/zipball/9bc03999c94dac1c912bad84797566c54a0a5205",
+                "reference": "9bc03999c94dac1c912bad84797566c54a0a5205",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +148,7 @@
             ],
             "description": "Software Development Kit for implementing PayNL's REST API",
             "homepage": "https://github.com/paynl/sdk",
-            "time": "2020-06-11T13:26:03+00:00"
+            "time": "2020-06-22T14:33:00+00:00"
         },
         {
             "name": "psr/container",
@@ -291,16 +291,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.17.0",
+            "version": "v1.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "e94c8b1bbe2bc77507a1056cdb06451c75b427f9"
+                "reference": "2edd75b8b35d62fd3eeabba73b26b8f1f60ce13d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/e94c8b1bbe2bc77507a1056cdb06451c75b427f9",
-                "reference": "e94c8b1bbe2bc77507a1056cdb06451c75b427f9",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/2edd75b8b35d62fd3eeabba73b26b8f1f60ce13d",
+                "reference": "2edd75b8b35d62fd3eeabba73b26b8f1f60ce13d",
                 "shasum": ""
             },
             "require": {
@@ -313,6 +313,10 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.17-dev"
+                },
+                "thanks": {
+                    "name": "symfony/polyfill",
+                    "url": "https://github.com/symfony/polyfill"
                 }
             },
             "autoload": {
@@ -345,7 +349,7 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2020-05-12T16:14:59+00:00"
+            "time": "2020-06-06T08:46:27+00:00"
         },
         {
             "name": "symfony/serializer",
