@@ -24,6 +24,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+use PayNL\Sdk\Model\RefundOverview;
+
 /**
  * @since 1.5.0
  */
@@ -79,7 +81,7 @@ class PaynlPaymentMethodsAjaxModuleFrontController extends ModuleFrontController
             $desc = $refundOverview->getDescription();
             $module->payLog('Refund', 'Refund success, result message: ' . $desc, $cartId, $transactionId);
 
-            $this->returnResponse(true, $amountRefunded, 'succesfully_refunded ' . $strCurrency . ' ' . $amount);
+            $this->returnResponse(true, $amountRefunded, 'succesfully_refunded ' . $strCurrency . ' ' . $amountRefunded);
         } else {
             $module->payLog('Refund', 'Refund failed: ' . $refundResult, $cartId, $transactionId);
             $this->returnResponse(false, 0, 'could_not_process_refund');
