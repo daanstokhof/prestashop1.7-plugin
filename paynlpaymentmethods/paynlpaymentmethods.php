@@ -34,6 +34,7 @@ if (!class_exists('\PayNL\Sdk\Api\Api')) {
 
 use Paynl\Result\Transaction\Refund;
 use PayNL\Sdk\Application\Application;
+use PayNL\Sdk\Model\Errors;
 use PrestaShop\PrestaShop\Core\Payment\PaymentOption;
 
 if (!defined('_PS_VERSION_')) {
@@ -134,6 +135,7 @@ class PaynlPaymentMethods extends PaymentModule
     $currency = new Currency($orderPayment->id_currency);
     $transactionId = $orderPayment->transaction_id;
     $amountRefunded = 0;
+    $amountLeftToRefund = $order->total_paid;
 
     try {
       $transaction = $this->getTransaction($transactionId);
@@ -145,7 +147,8 @@ class PaynlPaymentMethods extends PaymentModule
       $method = $transaction->getPaymentMethod()->getName();
       $showRefundButton = $transaction->isPaid() || $transaction->isPartiallyRefunded();
       if($transaction->getAmountRefunded()->getAmount() > 0) {
-          $amountRefunded = number_format($transaction->getAmountRefunded()->getAmount() / 100, 2, ',','.');
+          $amountRefunded = $transaction->getAmountRefunded()->getAmount() / 100;
+          $amountLeftToRefund -= $amountRefunded;
       }
     } catch (Exception $exception) {
       $showRefundButton = false;
@@ -163,13 +166,14 @@ class PaynlPaymentMethods extends PaymentModule
       'PrestaOrderId' => $orderId,
       'amountFormatted' => $amountFormatted,
       'amount' => $order->total_paid,
-      'amountRefunded' => $amountRefunded,
+      'amountRefunded' => number_format($amountRefunded, 2, ',','.'),
       'currency' => $currency->iso_code,
       'pay_orderid' => $transactionId,
       'status' => $status,
       'method' => $method,
       'ajaxURL' => $this->context->link->getModuleLink($this->name, 'ajax', array(), true),
       'showRefundButton' => $showRefundButton,
+      'amountLeftToRefund' => number_format($amountLeftToRefund, 2, ',','.')
     ));
 
     return $this->display(__FILE__, 'payorder.tpl');
@@ -843,7 +847,7 @@ class PaynlPaymentMethods extends PaymentModule
                 ),
                 'type' => $type,
                 'quantity' => $data['qty'],
-                'vat' => paynl_determine_vat_class($productPrice, ($productPrice * $vat)),
+                'vatCode' => paynl_determine_vat_class($productPrice, (($productPrice / (100 + $vat)) * $vat)),
 
             );
             $products[] = $product;
@@ -916,7 +920,7 @@ class PaynlPaymentMethods extends PaymentModule
 
       if ($this->shouldValidateOnStart($payment_option_id)) {
 
-        $this->payLog('startPayment', 'Pre-Creating order for pp : ' . $payment_option_id, $cartId, $payTransactionId);
+        $this->payLog('startPayment', 'Pre-Creating order for pp : ' . $payment_option_id, $cartId, $body->getId());
 
         # Flush the package list, so the fee is added to it.
         $this->context->cart->getPackageList(true);
@@ -932,13 +936,13 @@ class PaynlPaymentMethods extends PaymentModule
         $orderPayment->order_reference = $order->reference;
         $orderPayment->payment_method = 'PAY Overboeking';
         $orderPayment->amount = $totalAmount;
-        $orderPayment->transaction_id = ""; # TODO: implement orderId
+        $orderPayment->transaction_id = $body->getId();
         $orderPayment->id_currency = $cart->id_currency;
         $orderPayment->save();
 
       } else
       {
-        $this->payLog('startPayment', 'Not pre-creating the order, waiting for payment.', $cartId, $payTransactionId);
+        $this->payLog('startPayment', 'Not pre-creating the order, waiting for payment.', $cartId, $body->getId());
       }
 
         return $body->getIssuerUrl();

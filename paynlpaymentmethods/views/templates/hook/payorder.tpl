@@ -36,7 +36,7 @@
         {if $showRefundButton eq true}
             <div class="payOption" id="refund-div" style="display: inline-block">
                 <div class="label">{$lang.amount_to_refund} ({$currency}) :
-                    <input type="text" placeholder="0,00" value="{$amountFormatted}" id="pay-refund-amount"
+                    <input type="text" placeholder="0,00" value="{$amountLeftToRefund}" id="pay-refund-amount"
                            class="fixed-width-sm" style="display: inline;margin-right:10px"/>
                 </div>
                 <button type="button" id="pay-refund-button" class="btn btn-danger"
