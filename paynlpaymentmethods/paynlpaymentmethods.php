@@ -600,7 +600,7 @@ class PaynlPaymentMethods extends PaymentModule
     {
         $transaction = $this->getTransaction($transactionId);
         if(!$transaction) {
-            $this->adminDisplayWarning('PAY. Transaction not found. Please contact PAY. support.');
+            $this->adminDisplayWarning($this->l('PAY. Transaction not found. Please contact PAY. support.'));
             throw new Exception('PAY. transaction not found');
         }
 
