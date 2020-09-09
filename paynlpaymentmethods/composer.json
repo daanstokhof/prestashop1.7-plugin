@@ -11,7 +11,7 @@
   ],
   "require": {
     "php": ">=5.3.2",
-    "paynl/sdk": "dev-feature/v2"
+    "paynl/sdk": "dev-feature/2.x-dev"
   },
   "config": {
     "preferred-install": "dist"

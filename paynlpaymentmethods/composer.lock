@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fb6cedfd9ca2f0e0086099b47a3ddef",
+    "content-hash": "4a194a344fd625c745f1c9a5fa81b868",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -73,16 +73,16 @@
         },
         {
             "name": "paynl/sdk",
-            "version": "dev-feature/v2",
+            "version": "dev-feature/2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/sdk.git",
-                "reference": "ec6aedc630b84db4f26e88905b3ccbe56f9ed118"
+                "reference": "5e482b478547327c4aa7a15892cb8b828c9dadbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paynl/sdk/zipball/ec6aedc630b84db4f26e88905b3ccbe56f9ed118",
-                "reference": "ec6aedc630b84db4f26e88905b3ccbe56f9ed118",
+                "url": "https://api.github.com/repos/paynl/sdk/zipball/5e482b478547327c4aa7a15892cb8b828c9dadbf",
+                "reference": "5e482b478547327c4aa7a15892cb8b828c9dadbf",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +148,7 @@
             ],
             "description": "Software Development Kit for implementing PayNL's REST API",
             "homepage": "https://github.com/paynl/sdk",
-            "time": "2020-08-17T08:39:45+00:00"
+            "time": "2020-08-27T09:29:59+00:00"
         },
         {
             "name": "psr/container",
@@ -353,16 +353,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v4.4.11",
+            "version": "v4.4.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "0fe47b7aa55ff28b1b781e380120c0731e2d36c7"
+                "reference": "f8e1211fdd045d22bba98054fd7969bec955810a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/0fe47b7aa55ff28b1b781e380120c0731e2d36c7",
-                "reference": "0fe47b7aa55ff28b1b781e380120c0731e2d36c7",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/f8e1211fdd045d22bba98054fd7969bec955810a",
+                "reference": "f8e1211fdd045d22bba98054fd7969bec955810a",
                 "shasum": ""
             },
             "require": {
@@ -431,7 +431,7 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2020-07-21T15:17:25+00:00"
+            "time": "2020-08-31T16:04:23+00:00"
         },
         {
             "name": "zendframework/zend-filter",

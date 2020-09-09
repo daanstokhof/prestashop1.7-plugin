@@ -68,17 +68,17 @@
     },
     {
         "name": "paynl/sdk",
-        "version": "dev-feature/v2",
-        "version_normalized": "dev-feature/v2",
+        "version": "dev-feature/2.x-dev",
+        "version_normalized": "dev-feature/2.x-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/paynl/sdk.git",
-            "reference": "ec6aedc630b84db4f26e88905b3ccbe56f9ed118"
+            "reference": "5e482b478547327c4aa7a15892cb8b828c9dadbf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/paynl/sdk/zipball/ec6aedc630b84db4f26e88905b3ccbe56f9ed118",
-            "reference": "ec6aedc630b84db4f26e88905b3ccbe56f9ed118",
+            "url": "https://api.github.com/repos/paynl/sdk/zipball/5e482b478547327c4aa7a15892cb8b828c9dadbf",
+            "reference": "5e482b478547327c4aa7a15892cb8b828c9dadbf",
             "shasum": ""
         },
         "require": {
@@ -111,7 +111,7 @@
             "filp/whoops": "For enhanced exception handling",
             "symfony/var-dumper": "Allows another level of debugging within the application"
         },
-        "time": "2020-08-17T08:39:45+00:00",
+        "time": "2020-08-27T09:29:59+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -358,17 +358,17 @@
     },
     {
         "name": "symfony/serializer",
-        "version": "v4.4.11",
-        "version_normalized": "4.4.11.0",
+        "version": "v4.4.13",
+        "version_normalized": "4.4.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/serializer.git",
-            "reference": "0fe47b7aa55ff28b1b781e380120c0731e2d36c7"
+            "reference": "f8e1211fdd045d22bba98054fd7969bec955810a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/serializer/zipball/0fe47b7aa55ff28b1b781e380120c0731e2d36c7",
-            "reference": "0fe47b7aa55ff28b1b781e380120c0731e2d36c7",
+            "url": "https://api.github.com/repos/symfony/serializer/zipball/f8e1211fdd045d22bba98054fd7969bec955810a",
+            "reference": "f8e1211fdd045d22bba98054fd7969bec955810a",
             "shasum": ""
         },
         "require": {
@@ -407,7 +407,7 @@
             "symfony/property-info": "To deserialize relations.",
             "symfony/yaml": "For using the default YAML mapping loader."
         },
-        "time": "2020-07-21T15:17:25+00:00",
+        "time": "2020-08-31T16:04:23+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
